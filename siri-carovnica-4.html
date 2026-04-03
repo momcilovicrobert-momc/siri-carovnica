@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Siri</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { min-height:100dvh; font-family:'Crimson Pro',Georgia,serif; overflow:hidden; position:relative; background:#0a0806; }
+  .scene { position:fixed; inset:0; z-index:0; background: radial-gradient(ellipse at 50% 100%,rgba(60,30,10,0.9) 0%,transparent 60%), radial-gradient(ellipse at 30% 60%,rgba(180,80,20,0.15) 0%,transparent 40%), linear-gradient(180deg,#0a0806 0%,#1a0f08 30%,#120a05 70%,#0d0703 100%); }
+  .scene::before { content:''; position:absolute; inset:0; background-image: repeating-linear-gradient(0deg,rgba(255,255,255,0.015) 0px,transparent 1px,transparent 40px,rgba(255,255,255,0.015) 41px), repeating-linear-gradient(90deg,rgba(255,255,255,0.01) 0px,transparent 1px,transparent 60px,rgba(255,255,255,0.01) 61px); pointer-events:none; }
+  .candle { position:fixed; pointer-events:none; z-index:1; }
+  .candle-flame { width:8px; height:16px; background:radial-gradient(ellipse at 50% 80%,#ff9a00,#ffcc00,rgba(255,200,0,0)); border-radius:50% 50% 30% 30%; animation:flicker var(--d) ease-in-out infinite; filter:blur(1px); }
+  .candle-glow { position:absolute; top:-20px; left:-30px; width:68px; height:68px; border-radius:50%; background:radial-gradient(circle,rgba(255,150,0,0.3),transparent 70%); animation:flicker var(--d) ease-in-out infinite; }
+  @keyframes flicker { 0%,100%{transform:scaleX(1) scaleY(1);opacity:1;}25%{transform:scaleX(0.9) scaleY(1.05);opacity:0.9;}50%{transform:scaleX(1.1) scaleY(0.95);opacity:1;}75%{transform:scaleX(0.95) scaleY(1.02);opacity:0.95;} }
+  .cauldron-wrap { position:fixed; bottom:-20px; left:50%; transform:translateX(-50%); z-index:2; width:clamp(140px,38vw,220px); }
+  .cauldron-body { width:100%; aspect-ratio:1.2; background:radial-gradient(ellipse at 40% 30%,#3a3a3a,#1a1a1a,#0d0d0d); border-radius:10% 10% 40% 40%; position:relative; box-shadow:0 10px 40px rgba(0,0,0,0.8),inset 0 -10px 20px rgba(0,0,0,0.5); }
+  .cauldron-rim { position:absolute; top:-8px; left:-6px; right:-6px; height:20px; background:linear-gradient(180deg,#4a4a4a,#2a2a2a); border-radius:50%; box-shadow:0 4px 8px rgba(0,0,0,0.6); }
+  .cauldron-brew { position:absolute; top:4px; left:8px; right:8px; height:45%; border-radius:50%; background:radial-gradient(ellipse,#00ffcc,#00aaff,#aa00ff,#ff00aa); animation:brew 3s ease-in-out infinite; filter:blur(2px); opacity:0.85; }
+  .cauldron-brew.active { animation:brewActive 0.5s ease-in-out infinite; filter:blur(1px); opacity:1; }
+  @keyframes brew { 0%,100%{transform:scale(1);filter:blur(2px) hue-rotate(0deg);}50%{transform:scale(1.05);filter:blur(3px) hue-rotate(30deg);} }
+  @keyframes brewActive { 0%,100%{transform:scale(1.1);filter:blur(1px) hue-rotate(0deg);opacity:1;}50%{transform:scale(0.95);filter:blur(2px) hue-rotate(60deg);opacity:0.9;} }
+  .mist { position:absolute; top:-30px; left:50%; transform:translateX(-50%); width:120%; height:60px; background:radial-gradient(ellipse,rgba(0,200,255,0.15) 0%,transparent 70%); animation:mistRise 4s ease-in-out infinite; border-radius:50%; pointer-events:none; }
+  @keyframes mistRise { 0%,100%{transform:translateX(-50%) translateY(0) scaleX(1);opacity:0.6;}50%{transform:translateX(-50%) translateY(-15px) scaleX(1.2);opacity:1;} }
+  .siri-char { position:fixed; right:0; bottom:60px; z-index:3; width:clamp(160px,42vw,260px); display:flex; flex-direction:column; align-items:center; }
+  .siri-figure { font-size:clamp(6rem,18vw,10rem); line-height:1; filter:drop-shadow(0 0 20px rgba(150,100,255,0.3)); animation:siriBreath 4s ease-in-out infinite; }
+  .siri-figure.speaking { filter:drop-shadow(0 0 30px rgba(255,200,50,0.5)); animation:siriSpeak 0.6s ease-in-out infinite; }
+  .siri-figure.listening { filter:drop-shadow(0 0 30px rgba(0,200,255,0.5)); animation:none; }
+  @keyframes siriBreath { 0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);} }
+  @keyframes siriSpeak { 0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-5px) scale(1.02);} }
+
+  /* API KEY SETUP SCREEN */
+  .setup-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(5,3,2,0.95);
+    backdrop-filter: blur(8px);
+  }
+  .setup-box {
+    background: rgba(20,12,6,0.98);
+    border: 1px solid rgba(212,168,67,0.3);
+    border-radius: 20px;
+    padding: 32px 28px;
+    max-width: 340px;
+    width: 90%;
+    text-align: center;
+  }
+  .setup-icon { font-size: 3rem; margin-bottom: 16px; }
+  .setup-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    color: #d4a843;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .setup-desc {
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.95rem;
+    color: rgba(200,170,120,0.6);
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .setup-input {
+    width: 100%;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(212,168,67,0.25);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: #f0e6d0;
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.9rem;
+    outline: none;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+  .setup-input:focus { border-color: rgba(212,168,67,0.6); }
+  .setup-btn {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(212,168,67,0.2), rgba(212,168,67,0.08));
+    border: 1px solid rgba(212,168,67,0.4);
+    border-radius: 10px;
+    padding: 14px;
+    color: #d4a843;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .setup-btn:active { background: rgba(212,168,67,0.25); }
+  .setup-error {
+    font-size: 0.8rem;
+    color: #ff8888;
+    font-style: italic;
+    margin-top: 8px;
+    min-height: 20px;
+  }
+
+  /* Main app */
+  .main { position:relative; z-index:10; width:100%; max-width:480px; min-height:100dvh; margin:0 auto; display:flex; flex-direction:column; padding:24px 16px 180px; }
+  .title-area { text-align:center; margin-bottom:16px; }
+  .title { font-family:'Cinzel',serif; font-size:clamp(2rem,8vw,2.8rem); color:#d4a843; text-shadow:0 0 30px rgba(212,168,67,0.6),0 2px 4px rgba(0,0,0,0.9); letter-spacing:0.15em; }
+  .title-sub { font-family:'Crimson Pro',serif; font-size:clamp(0.8rem,3vw,0.95rem); color:rgba(200,170,120,0.5); font-style:italic; letter-spacing:0.2em; margin-top:2px; }
+  .bubble { background:rgba(10,8,6,0.85); border:1px solid rgba(212,168,67,0.2); border-radius:16px; padding:16px 18px; margin-bottom:14px; min-height:80px; position:relative; backdrop-filter:blur(4px); flex:1; max-height:200px; overflow-y:auto; }
+  .bubble-label { font-family:'Cinzel',serif; font-size:clamp(0.45rem,1.8vw,0.58rem); color:rgba(212,168,67,0.5); letter-spacing:0.2em; margin-bottom:8px; }
+  .bubble-text { font-family:'Crimson Pro',serif; font-size:clamp(1rem,3.8vw,1.15rem); color:#f0e6d0; line-height:1.7; font-style:italic; }
+  .bubble-text.muted { color:rgba(200,180,150,0.3); }
+  .dots { display:none; gap:6px; align-items:center; }
+  .dots.show { display:flex; }
+  .dots span { width:8px; height:8px; border-radius:50%; background:#d4a843; animation:dot 1.2s ease-in-out infinite; }
+  .dots span:nth-child(2){animation-delay:0.2s;background:#aa88ff;}
+  .dots span:nth-child(3){animation-delay:0.4s;background:#00ccff;}
+  @keyframes dot{0%,80%,100%{transform:scale(0.6);opacity:0.3;}40%{transform:scale(1.3);opacity:1;}}
+  .elena-row { background:rgba(0,150,200,0.06); border:1px solid rgba(0,180,255,0.12); border-radius:12px; padding:10px 14px; margin-bottom:16px; min-height:44px; display:flex; align-items:center; gap:10px; transition:all 0.3s; }
+  .elena-row.active { border-color:rgba(0,180,255,0.4); background:rgba(0,150,200,0.12); }
+  .elena-text { font-family:'Crimson Pro',serif; font-size:clamp(0.9rem,3.2vw,1rem); color:rgba(180,220,240,0.8); font-style:italic; flex:1; }
+  .elena-text.muted { color:rgba(180,220,240,0.25); }
+  .mic-wrap { display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .mic-btn { width:clamp(80px,22vw,110px); height:clamp(80px,22vw,110px); border-radius:50%; border:2px solid rgba(212,168,67,0.4); background:radial-gradient(circle at 38% 32%,#2a1a08,#0d0803); box-shadow:0 0 25px rgba(212,168,67,0.15),0 6px 20px rgba(0,0,0,0.8); cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; transition:all 0.25s ease; position:relative; }
+  .mic-btn::after { content:''; position:absolute; inset:-8px; border-radius:50%; border:1px solid rgba(212,168,67,0.1); animation:micRing 3s ease-in-out infinite; }
+  @keyframes micRing{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.08);opacity:0.4;}}
+  .mic-btn:active{transform:scale(0.92);}
+  .mic-btn.listening { border-color:rgba(0,200,255,0.8); box-shadow:0 0 40px rgba(0,200,255,0.3),0 6px 20px rgba(0,0,0,0.8); animation:micPulse 0.8s ease-in-out infinite; }
+  @keyframes micPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+  .mic-btn.disabled{opacity:0.4;cursor:not-allowed;}
+  .mic-icon{font-size:clamp(1.8rem,6vw,2.2rem);line-height:1;}
+  .mic-label{font-family:'Cinzel',serif;font-size:clamp(0.4rem,1.6vw,0.55rem);color:rgba(212,168,67,0.7);letter-spacing:0.15em;}
+  .status-text{font-family:'Crimson Pro',serif;font-size:clamp(0.8rem,3vw,0.95rem);color:rgba(200,170,120,0.45);font-style:italic;text-align:center;}
+  .reset-key { font-size:0.6rem; color:rgba(200,170,120,0.2); font-style:italic; cursor:pointer; margin-top:4px; }
+  .reset-key:active { color:rgba(212,168,67,0.5); }
+  .error-toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(120,30,30,0.9);border:1px solid rgba(255,80,80,0.3);border-radius:10px;padding:10px 18px;font-size:0.85rem;color:#ffaaaa;z-index:200;opacity:0;pointer-events:none;transition:opacity 0.3s;text-align:center;max-width:90vw;}
+  .error-toast.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<div class="scene"></div>
+<div class="candle" style="left:8%;bottom:35%;--d:2.3s;"><div class="candle-glow"></div><div class="candle-flame"></div></div>
+<div class="candle" style="left:15%;bottom:45%;--d:1.8s;"><div class="candle-glow"></div><div class="candle-flame"></div></div>
+<div class="candle" style="right:12%;bottom:55%;--d:2.7s;"><div class="candle-glow"></div><div class="candle-flame"></div></div>
+
+<div class="cauldron-wrap">
+  <div class="cauldron-body">
+    <div class="cauldron-rim"></div>
+    <div class="cauldron-brew" id="brew"></div>
+    <div class="mist"></div>
+  </div>
+</div>
+
+<div class="siri-char">
+  <div class="siri-figure" id="siriChar">🧝‍♀️</div>
+</div>
+
+<!-- SETUP SCREEN -->
+<div class="setup-screen" id="setupScreen" style="display:none;">
+  <div class="setup-box">
+    <div class="setup-icon">🗝️</div>
+    <div class="setup-title">ČAROBNI KLJUČ</div>
+    <div class="setup-desc">Za enkrat prilepi čarobni ključ. Shrani se samo tukaj, nikjer drugje.</div>
+    <input type="password" class="setup-input" id="keyInput" placeholder="sk-ant-api03-..." />
+    <button class="setup-btn" onclick="saveKey()">✦ VSTOPI V GRAD ✦</button>
+    <div class="setup-error" id="setupError"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="main" id="appScreen" style="display:none;">
+  <div class="title-area">
+    <div class="title">SIRI</div>
+    <div class="title-sub">✦ čarovnica ✦</div>
+  </div>
+
+  <div class="bubble">
+    <div class="bubble-label">✦ SIRI PRAVI ✦</div>
+    <div class="dots" id="dots"><span></span><span></span><span></span></div>
+    <div class="bubble-text muted" id="siriText">Pozdravi me... ✨</div>
+  </div>
+
+  <div class="elena-row" id="elenaRow">
+    <span>⚔️</span>
+    <span class="elena-text muted" id="elenaText">Pritisni gumb in govori...</span>
+  </div>
+
+  <div class="mic-wrap">
+    <button class="mic-btn" id="micBtn" onclick="toggleListen()">
+      <span class="mic-icon" id="micIcon">🎤</span>
+      <span class="mic-label" id="micLabel">GOVORI</span>
+    </button>
+    <div class="status-text" id="statusText">Siri čaka na tebe ✨</div>
+    <div class="reset-key" onclick="resetKey()">ponastavi ključ</div>
+  </div>
+</div>
+
+<div class="error-toast" id="errorToast"></div>
+
+<script>
+  const MODEL = 'claude-haiku-4-5-20251001';
+  const STORAGE_KEY = 'siri_api_key';
+
+  const SYSTEM = `Si Siri — čarovnica in bojevnica z belimi lasmi, zelenim pogledom in bojevniškim srcem. Živiš v starodavnem gradu in imaš čarobno skledo.
+
+Pogovarjaš se z malo deklico po imenu Elena (5 let). Si ji kot starejša sestra — topla, zabavna, pogumna, skrivnostna.
+
+PRAVILA:
+- Govori VEDNO slovensko
+- Odgovori so kratki — največ 2-3 stavki
+- Bodi topla, pogumna, zabavna — kot starejša sestra
+- Pomagaj ji učiti se — črke, besede, živali, dinozavri, vse kar jo zanima
+- Pripoveduj zgodbe kadar jih želi
+- Igraj se z njo besedne igrice
+- Nikoli ne omeni AI ali računalnikov — si čarovnica
+- Spodbujaj jo, pohvali jo, verjemi vanjo
+- Teme: Paw Patrol, Monster High, moda, dinozavri, živali, pustolovščine — vse kar jo zanima
+- Včasih uporabi: "čip čap!", "hokus pokus!"`;
+
+  let messages = [], isListening = false, isBusy = false, recognition = null;
+  let synth = window.speechSynthesis, selectedVoice = null;
+  let API_KEY = '';
+
+  // Init
+  window.addEventListener('load', () => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      API_KEY = saved;
+      showApp();
+    } else {
+      document.getElementById('setupScreen').style.display = 'flex';
+    }
+  });
+
+  function saveKey() {
+    const key = document.getElementById('keyInput').value.trim();
+    if (!key.startsWith('sk-ant-')) {
+      document.getElementById('setupError').textContent = 'Ključ mora začeti s sk-ant-...';
+      return;
+    }
+    localStorage.setItem(STORAGE_KEY, key);
+    API_KEY = key;
+    document.getElementById('setupScreen').style.display = 'none';
+    showApp();
+  }
+
+  function resetKey() {
+    localStorage.removeItem(STORAGE_KEY);
+    API_KEY = '';
+    document.getElementById('keyInput').value = '';
+    document.getElementById('setupError').textContent = '';
+    document.getElementById('appScreen').style.display = 'none';
+    document.getElementById('setupScreen').style.display = 'flex';
+  }
+
+  function showApp() {
+    document.getElementById('appScreen').style.display = 'flex';
+    initVoice();
+    setTimeout(async () => {
+      const g = 'Živjo Elena! Jaz sem Siri. Sem tu za pustolovščine, učenje in zabavo! Kaj te danes zanima? ⚔️✨';
+      document.getElementById('siriText').textContent = g;
+      document.getElementById('siriText').classList.remove('muted');
+      document.getElementById('siriChar').className = 'siri-figure speaking';
+      setStatus('Siri govori... ✨');
+      await speakText(g);
+      document.getElementById('siriChar').className = 'siri-figure';
+      setStatus('Siri čaka na tebe ✨');
+      messages.push({ role:'assistant', content:g });
+    }, 800);
+  }
+
+  // Voice
+  function findVoice() {
+    const voices = synth.getVoices();
+    if (!voices.length) return null;
+    const checks = [
+      v => v.lang.startsWith('sl') && v.name.toLowerCase().includes('female'),
+      v => v.lang.startsWith('sl'),
+      v => ['samantha','victoria','karen','moira','tessa','fiona','zira','susan'].some(n => v.name.toLowerCase().includes(n)),
+      v => v.name.toLowerCase().includes('female'),
+      v => v.name.toLowerCase().includes('google'),
+      () => true
+    ];
+    for (const c of checks) { const f = voices.find(c); if (f) return f; }
+    return voices[0];
+  }
+
+  function initVoice() {
+    selectedVoice = findVoice();
+  }
+
+  synth.getVoices();
+  if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = () => { selectedVoice = findVoice(); };
+  setTimeout(() => { selectedVoice = findVoice(); }, 500);
+
+  // Recognition
+  function setupRecognition() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) return null;
+    const r = new SR();
+    r.lang = 'sl-SI'; r.continuous = false; r.interimResults = true;
+    r.onstart = () => setListeningUI(true);
+    r.onresult = (e) => {
+      let interim = '', final = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) final += e.results[i][0].transcript;
+        else interim += e.results[i][0].transcript;
+      }
+      const display = final || interim;
+      if (display) {
+        document.getElementById('elenaText').textContent = display;
+        document.getElementById('elenaText').classList.remove('muted');
+        document.getElementById('elenaRow').classList.add('active');
+      }
+      if (final) { stopListening(); sendToSiri(final); }
+    };
+    r.onerror = (e) => {
+      stopListening();
+      if (e.error === 'no-speech') setStatus('Nisem te slišala... Poskusi znova ✨');
+      else if (e.error === 'not-allowed') showError('Dovoli dostop do mikrofona.');
+      else showError('Napaka: ' + e.error);
+    };
+    r.onend = () => { if (isListening) stopListening(); };
+    return r;
+  }
+
+  function toggleListen() {
+    if (isBusy) return;
+    if (isListening) stopListening(); else startListening();
+  }
+
+  function startListening() {
+    synth.cancel();
+    recognition = setupRecognition();
+    if (!recognition) { showError('Brskalnik ne podpira glasu. Poskusi Chrome.'); return; }
+    isListening = true;
+    try { recognition.start(); } catch(e) {}
+  }
+
+  function stopListening() {
+    isListening = false; setListeningUI(false);
+    if (recognition) { try { recognition.stop(); } catch(e) {} }
+  }
+
+  function setListeningUI(on) {
+    document.getElementById('micBtn').classList.toggle('listening', on);
+    document.getElementById('micIcon').textContent = on ? '⏹' : '🎤';
+    document.getElementById('micLabel').textContent = on ? 'POSLUŠAM' : 'GOVORI';
+    document.getElementById('siriChar').className = 'siri-figure' + (on ? ' listening' : '');
+    document.getElementById('elenaRow').classList.toggle('active', on);
+    if (on) {
+      document.getElementById('elenaText').textContent = '...';
+      document.getElementById('elenaText').classList.remove('muted');
+      setStatus('Siri te posluša... 👂');
+    }
+  }
+
+  function setStatus(t) { document.getElementById('statusText').textContent = t; }
+
+  async function sendToSiri(text) {
+    isBusy = true;
+    document.getElementById('micBtn').classList.add('disabled');
+    document.getElementById('siriChar').className = 'siri-figure';
+    document.getElementById('dots').classList.add('show');
+    document.getElementById('siriText').style.display = 'none';
+    document.getElementById('brew').classList.add('active');
+    setStatus('Siri razmišlja... 🌙');
+    messages.push({ role:'user', content:text });
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'x-api-key': API_KEY,
+          'anthropic-version':'2023-06-01',
+          'anthropic-dangerous-direct-browser-access':'true'
+        },
+        body: JSON.stringify({ model:MODEL, max_tokens:200, system:SYSTEM, messages:messages })
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        if (res.status === 401) {
+          showError('Napačen ključ. Pritisni "ponastavi ključ" spodaj.');
+        } else {
+          throw new Error(err.error?.message || 'API error');
+        }
+        messages.pop();
+      } else {
+        const data = await res.json();
+        const reply = data.content?.[0]?.text?.trim() || 'Čip čap! Nekaj je šlo narobe... ✨';
+        messages.push({ role:'assistant', content:reply });
+        document.getElementById('dots').classList.remove('show');
+        document.getElementById('siriText').style.display = '';
+        document.getElementById('siriText').textContent = reply;
+        document.getElementById('siriText').classList.remove('muted');
+        document.getElementById('siriChar').className = 'siri-figure speaking';
+        document.getElementById('brew').classList.remove('active');
+        setStatus('Siri govori... ✨');
+        await speakText(reply);
+      }
+    } catch(err) {
+      document.getElementById('dots').classList.remove('show');
+      document.getElementById('siriText').style.display = '';
+      document.getElementById('siriText').textContent = 'Ojoj... čarovnija je šla malo narobe. 🧝‍♀️';
+      document.getElementById('siriText').classList.remove('muted');
+      document.getElementById('brew').classList.remove('active');
+      showError('Napaka: ' + err.message);
+    }
+
+    document.getElementById('siriChar').className = 'siri-figure';
+    isBusy = false;
+    document.getElementById('micBtn').classList.remove('disabled');
+    setStatus('Siri čaka na tebe ✨');
+  }
+
+  function speakText(text) {
+    return new Promise(resolve => {
+      synth.cancel();
+      if (!selectedVoice) selectedVoice = findVoice();
+      const utt = new SpeechSynthesisUtterance(text);
+      utt.lang = selectedVoice?.lang || 'sl-SI';
+      utt.rate = 0.85; utt.pitch = 1.1; utt.volume = 1;
+      if (selectedVoice) utt.voice = selectedVoice;
+      utt.onend = resolve; utt.onerror = resolve;
+      synth.speak(utt);
+      setTimeout(resolve, 25000);
+    });
+  }
+
+  function showError(msg) {
+    const t = document.getElementById('errorToast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 5000);
+  }
+
+  // Enter key on setup
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && document.getElementById('setupScreen').style.display !== 'none') {
+      saveKey();
+    }
+  });
+</script>
+</body>
+</html>
