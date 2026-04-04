@@ -8,249 +8,85 @@
 <style>
   :root {
     --midnight: #06030f;
-    --deep: #0d0820;
     --gold: #c8920a;
     --gold-bright: #f0c040;
-    --ember: #e04010;
     --cream: #f5e8c8;
     --mist: #d0c0f0;
     --smoke: #8070a0;
     --magic-green: #40e890;
     --magic-pink: #f060c0;
-    --magic-blue: #60c0ff;
   }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; }
+  html,body { width:100%; height:100%; overflow:hidden; font-family:'Crimson Text',Georgia,serif; background:var(--midnight); color:var(--cream); }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+  .screen { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; transition:opacity 0.6s ease; }
+  .screen.hidden { opacity:0; pointer-events:none; }
 
-  html, body {
-    width: 100%; height: 100%;
-    overflow: hidden;
-    font-family: 'Crimson Text', Georgia, serif;
-    background: var(--midnight);
-    color: var(--cream);
-  }
+  /* KEY SCREEN */
+  #keyScreen { background:radial-gradient(ellipse at 50% 30%,#1a0a30 0%,#06030f 70%); padding:2rem; text-align:center; gap:1.5rem; }
+  .key-stars { position:absolute; inset:0; pointer-events:none; background-image: radial-gradient(1px 1px at 15% 20%,rgba(255,255,255,.9) 0%,transparent 100%), radial-gradient(1.5px 1.5px at 50% 5%,rgba(240,192,64,.8) 0%,transparent 100%), radial-gradient(1px 1px at 70% 15%,rgba(255,255,255,.8) 0%,transparent 100%), radial-gradient(1px 1px at 90% 45%,rgba(168,85,247,.7) 0%,transparent 100%), radial-gradient(1px 1px at 10% 80%,rgba(255,255,255,.3) 0%,transparent 100%), radial-gradient(1.5px 1.5px at 40% 70%,rgba(240,192,64,.5) 0%,transparent 100%); }
+  .key-icon { font-size:4rem; animation:float 3s ease-in-out infinite; position:relative; z-index:1; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  .key-title { font-family:'Cinzel',serif; font-size:1.6rem; font-weight:700; color:var(--gold-bright); text-shadow:0 0 20px rgba(240,192,64,.6); letter-spacing:.1em; position:relative; z-index:1; }
+  .key-subtitle { font-size:1rem; color:var(--mist); line-height:1.5; max-width:280px; font-style:italic; position:relative; z-index:1; }
+  .key-input-wrap { position:relative; z-index:1; width:100%; max-width:320px; }
+  .key-input { width:100%; padding:.9rem 1.2rem; background:rgba(255,255,255,.05); border:1px solid rgba(240,192,64,.3); border-radius:12px; color:var(--cream); font-family:'Crimson Text',serif; font-size:1rem; outline:none; text-align:center; transition:border-color .3s,box-shadow .3s; }
+  .key-input:focus { border-color:rgba(240,192,64,.7); box-shadow:0 0 20px rgba(240,192,64,.15); }
+  .key-input::placeholder { color:var(--smoke); }
+  .key-btn { position:relative; z-index:1; width:100%; max-width:320px; padding:1rem 2rem; background:linear-gradient(135deg,#8b6010,#c8920a,#8b6010); border:none; border-radius:12px; color:var(--midnight); font-family:'Cinzel',serif; font-size:1rem; font-weight:700; letter-spacing:.08em; cursor:pointer; box-shadow:0 4px 20px rgba(200,146,10,.4); transition:transform .15s; }
+  .key-btn:active { transform:scale(.97); }
+  .key-reset { position:relative; z-index:1; background:none; border:none; color:var(--smoke); font-size:.8rem; font-family:'Crimson Text',serif; cursor:pointer; text-decoration:underline; padding:.3rem; }
 
-  .screen {
-    position: fixed; inset: 0;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    transition: opacity 0.6s ease;
-  }
-  .screen.hidden { opacity: 0; pointer-events: none; }
+  /* CHAT SCREEN */
+  #chatScreen { padding:0; justify-content:flex-end; }
+  .siri-bg { position:absolute; inset:0; background-image:url('https://raw.githubusercontent.com/momcilovicrobert-momc/siri-carovnica/main/siri.png'); background-size:cover; background-position:center top; }
+  .siri-bg::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,rgba(6,3,15,0) 0%,rgba(6,3,15,0) 35%,rgba(6,3,15,.4) 55%,rgba(6,3,15,.92) 78%,rgba(6,3,15,.98) 100%); }
 
-  /* ══ KEY SCREEN ══ */
-  #keyScreen {
-    background: radial-gradient(ellipse at 50% 30%, #1a0a30 0%, #06030f 70%);
-    padding: 2rem; text-align: center; gap: 1.5rem;
-  }
-  .key-stars {
-    position: absolute; inset: 0; pointer-events: none;
-    background-image:
-      radial-gradient(1px 1px at 15% 20%, rgba(255,255,255,0.9) 0%, transparent 100%),
-      radial-gradient(1px 1px at 30% 10%, rgba(255,255,255,0.7) 0%, transparent 100%),
-      radial-gradient(1.5px 1.5px at 50% 5%, rgba(240,192,64,0.8) 0%, transparent 100%),
-      radial-gradient(1px 1px at 70% 15%, rgba(255,255,255,0.8) 0%, transparent 100%),
-      radial-gradient(1px 1px at 85% 8%, rgba(255,255,255,0.6) 0%, transparent 100%),
-      radial-gradient(1px 1px at 20% 50%, rgba(255,255,255,0.4) 0%, transparent 100%),
-      radial-gradient(1px 1px at 90% 45%, rgba(168,85,247,0.7) 0%, transparent 100%),
-      radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
-      radial-gradient(1px 1px at 60% 85%, rgba(255,255,255,0.4) 0%, transparent 100%),
-      radial-gradient(1.5px 1.5px at 40% 70%, rgba(240,192,64,0.5) 0%, transparent 100%);
-  }
-  .key-icon { font-size: 4rem; animation: float 3s ease-in-out infinite; position: relative; z-index: 1; }
-  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-  .key-title {
-    font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 700;
-    color: var(--gold-bright); text-shadow: 0 0 20px rgba(240,192,64,0.6);
-    letter-spacing: 0.1em; position: relative; z-index: 1;
-  }
-  .key-subtitle {
-    font-size: 1rem; color: var(--mist); line-height: 1.5;
-    max-width: 280px; font-style: italic; position: relative; z-index: 1;
-  }
-  .key-input-wrap { position: relative; z-index: 1; width: 100%; max-width: 320px; }
-  .key-input {
-    width: 100%; padding: 0.9rem 1.2rem;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(240,192,64,0.3); border-radius: 12px;
-    color: var(--cream); font-family: 'Crimson Text', serif; font-size: 1rem;
-    outline: none; text-align: center; transition: border-color 0.3s, box-shadow 0.3s;
-  }
-  .key-input:focus { border-color: rgba(240,192,64,0.7); box-shadow: 0 0 20px rgba(240,192,64,0.15); }
-  .key-input::placeholder { color: var(--smoke); }
-  .key-btn {
-    position: relative; z-index: 1; width: 100%; max-width: 320px;
-    padding: 1rem 2rem; background: linear-gradient(135deg, #8b6010, #c8920a, #8b6010);
-    border: none; border-radius: 12px; color: var(--midnight);
-    font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 700;
-    letter-spacing: 0.08em; cursor: pointer; box-shadow: 0 4px 20px rgba(200,146,10,0.4);
-    transition: transform 0.15s;
-  }
-  .key-btn:active { transform: scale(0.97); }
-  .key-reset {
-    position: relative; z-index: 1; background: none; border: none;
-    color: var(--smoke); font-size: 0.8rem; font-family: 'Crimson Text', serif;
-    cursor: pointer; text-decoration: underline; padding: 0.3rem;
-  }
+  .particle { position:absolute; border-radius:50%; pointer-events:none; animation:particle-rise linear infinite; opacity:0; }
+  @keyframes particle-rise { 0%{transform:translateY(0) scale(1);opacity:0} 10%{opacity:.8} 90%{opacity:.3} 100%{transform:translateY(-55vh) scale(.2);opacity:0} }
 
-  /* ══ CHAT SCREEN ══ */
-  #chatScreen { padding: 0; justify-content: flex-end; }
+  .cauldron-glow { position:absolute; bottom:28%; left:50%; transform:translateX(-50%); width:220px; height:90px; background:radial-gradient(ellipse,rgba(64,232,144,.2) 0%,transparent 70%); pointer-events:none; z-index:5; opacity:0; transition:opacity .5s; animation:cauldron-pulse 2s ease-in-out infinite; }
+  .cauldron-glow.active { opacity:1; }
+  @keyframes cauldron-pulse { 0%,100%{transform:translateX(-50%) scaleY(1)} 50%{transform:translateX(-50%) scaleY(1.4)} }
 
-  .siri-bg {
-    position: absolute; inset: 0;
-    background-image: url('https://raw.githubusercontent.com/momcilovicrobert-momc/siri-carovnica/main/siri.png');
-    background-size: cover; background-position: center top;
-  }
-  .siri-bg::after {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(to bottom,
-      rgba(6,3,15,0) 0%, rgba(6,3,15,0) 35%,
-      rgba(6,3,15,0.4) 55%, rgba(6,3,15,0.92) 78%,
-      rgba(6,3,15,0.98) 100%);
-  }
+  .chat-panel { position:relative; z-index:10; width:100%; padding:.8rem 1.2rem 1.8rem; display:flex; flex-direction:column; align-items:center; gap:.7rem; }
 
-  /* Particles */
-  .particle {
-    position: absolute; border-radius: 50%; pointer-events: none;
-    animation: particle-rise linear infinite; opacity: 0;
-  }
-  @keyframes particle-rise {
-    0%   { transform: translateY(0) scale(1); opacity: 0; }
-    10%  { opacity: 0.8; }
-    90%  { opacity: 0.3; }
-    100% { transform: translateY(-55vh) scale(0.2); opacity: 0; }
-  }
+  /* Drawing area */
+  .drawing-area { width:100%; max-width:420px; background:rgba(10,5,25,.85); border:1px solid rgba(240,192,64,.2); border-radius:16px; padding:.8rem; backdrop-filter:blur(14px); display:none; align-items:center; justify-content:center; min-height:180px; }
+  .drawing-area.visible { display:flex; }
+  .drawing-area svg { max-width:100%; max-height:200px; }
 
-  /* Cauldron glow */
-  .cauldron-glow {
-    position: absolute; bottom: 28%; left: 50%; transform: translateX(-50%);
-    width: 220px; height: 90px;
-    background: radial-gradient(ellipse, rgba(64,232,144,0.2) 0%, transparent 70%);
-    pointer-events: none; z-index: 5; opacity: 0; transition: opacity 0.5s;
-    animation: cauldron-pulse 2s ease-in-out infinite;
-  }
-  .cauldron-glow.active { opacity: 1; }
-  @keyframes cauldron-pulse {
-    0%,100% { transform: translateX(-50%) scaleY(1); }
-    50% { transform: translateX(-50%) scaleY(1.4); }
-  }
+  .speech-bubble { width:100%; max-width:420px; min-height:72px; background:rgba(10,5,25,.88); border:1px solid rgba(240,192,64,.2); border-radius:20px; padding:1rem 1.2rem; backdrop-filter:blur(14px); box-shadow:0 8px 32px rgba(0,0,0,.6),inset 0 1px 0 rgba(240,192,64,.08); }
+  .bubble-name { font-family:'Cinzel',serif; font-size:.65rem; font-weight:600; color:var(--gold-bright); letter-spacing:.15em; margin-bottom:.4rem; opacity:.75; }
+  .bubble-text { font-size:1.1rem; line-height:1.6; color:var(--cream); font-style:italic; min-height:1.6rem; }
 
-  /* Bottom panel */
-  .chat-panel {
-    position: relative; z-index: 10; width: 100%;
-    padding: 0.8rem 1.2rem 1.8rem;
-    display: flex; flex-direction: column; align-items: center; gap: 0.7rem;
-  }
+  .status-line { font-size:.8rem; color:var(--smoke); letter-spacing:.04em; height:1.1rem; font-style:italic; transition:color .3s; }
+  .status-line.listening { color:var(--magic-green); }
+  .status-line.speaking  { color:var(--gold-bright); }
+  .status-line.thinking  { color:var(--magic-pink); }
 
-  /* Drawing display area */
-  .drawing-area {
-    width: 100%; max-width: 420px;
-    background: rgba(10,5,25,0.85);
-    border: 1px solid rgba(240,192,64,0.2);
-    border-radius: 16px; padding: 0.8rem;
-    backdrop-filter: blur(14px);
-    display: none; align-items: center; justify-content: center;
-    min-height: 180px;
-  }
-  .drawing-area.visible { display: flex; }
-  .drawing-area svg { max-width: 100%; max-height: 200px; }
+  .btn-row { display:flex; align-items:center; justify-content:center; gap:1.4rem; width:100%; max-width:420px; }
 
-  /* Speech bubble */
-  .speech-bubble {
-    width: 100%; max-width: 420px; min-height: 72px;
-    background: rgba(10,5,25,0.88);
-    border: 1px solid rgba(240,192,64,0.2); border-radius: 20px;
-    padding: 1rem 1.2rem; backdrop-filter: blur(14px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(240,192,64,0.08);
-  }
-  .bubble-name {
-    font-family: 'Cinzel', serif; font-size: 0.65rem; font-weight: 600;
-    color: var(--gold-bright); letter-spacing: 0.15em; margin-bottom: 0.4rem; opacity: 0.75;
-  }
-  .bubble-text {
-    font-size: 1.1rem; line-height: 1.6; color: var(--cream);
-    font-style: italic; min-height: 1.6rem;
-  }
+  .talk-btn { width:80px; height:80px; border-radius:50%; border:3px solid rgba(240,192,64,.4); background:radial-gradient(circle at 40% 35%,rgba(200,146,10,.25),rgba(10,5,25,.92)); display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; box-shadow:0 0 20px rgba(200,146,10,.15),0 4px 16px rgba(0,0,0,.7); -webkit-touch-callout:none; touch-action:none; transition:border-color .15s,box-shadow .15s,transform .1s; }
+  .talk-btn.active { transform:scale(.93); border-color:var(--magic-green); box-shadow:0 0 30px rgba(64,232,144,.45),0 4px 16px rgba(0,0,0,.7); background:radial-gradient(circle at 40% 35%,rgba(64,232,144,.18),rgba(10,5,25,.92)); }
+  .talk-btn .mic-icon { font-size:2rem; pointer-events:none; }
+  .talk-btn.active::before { content:''; position:absolute; inset:-8px; border-radius:50%; border:2px solid rgba(64,232,144,.45); animation:pulse-ring 1s ease-out infinite; }
+  .talk-btn.active::after  { content:''; position:absolute; inset:-18px; border-radius:50%; border:1px solid rgba(64,232,144,.2); animation:pulse-ring 1s ease-out .35s infinite; }
+  @keyframes pulse-ring { 0%{transform:scale(.88);opacity:1} 100%{transform:scale(1.1);opacity:0} }
 
-  /* Status */
-  .status-line {
-    font-size: 0.8rem; color: var(--smoke); letter-spacing: 0.04em;
-    height: 1.1rem; font-style: italic; transition: color 0.3s;
-  }
-  .status-line.listening { color: var(--magic-green); }
-  .status-line.speaking  { color: var(--gold-bright); }
-  .status-line.thinking  { color: var(--magic-pink); }
+  .stop-btn { width:52px; height:52px; border-radius:50%; border:2px solid rgba(224,64,16,.45); background:radial-gradient(circle,rgba(224,64,16,.18),rgba(10,5,25,.92)); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.3rem; box-shadow:0 0 12px rgba(224,64,16,.15); opacity:0; pointer-events:none; transition:opacity .3s,transform .1s; }
+  .stop-btn.visible { opacity:1; pointer-events:all; }
+  .stop-btn:active { transform:scale(.9); }
 
-  /* Button row */
-  .btn-row {
-    display: flex; align-items: center; justify-content: center;
-    gap: 1.4rem; width: 100%; max-width: 420px;
-  }
+  .hint { font-size:.72rem; color:rgba(208,192,240,.45); letter-spacing:.05em; font-style:italic; }
 
-  /* Hold-to-talk */
-  .talk-btn {
-    width: 80px; height: 80px; border-radius: 50%;
-    border: 3px solid rgba(240,192,64,0.4);
-    background: radial-gradient(circle at 40% 35%, rgba(200,146,10,0.25), rgba(10,5,25,0.92));
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; position: relative;
-    box-shadow: 0 0 20px rgba(200,146,10,0.15), 0 4px 16px rgba(0,0,0,0.7);
-    -webkit-touch-callout: none; touch-action: none;
-    transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
-  }
-  .talk-btn.active {
-    transform: scale(0.93); border-color: var(--magic-green);
-    box-shadow: 0 0 30px rgba(64,232,144,0.45), 0 4px 16px rgba(0,0,0,0.7);
-    background: radial-gradient(circle at 40% 35%, rgba(64,232,144,0.18), rgba(10,5,25,0.92));
-  }
-  .talk-btn .mic-icon { font-size: 2rem; pointer-events: none; }
-  .talk-btn.active::before {
-    content: ''; position: absolute; inset: -8px; border-radius: 50%;
-    border: 2px solid rgba(64,232,144,0.45);
-    animation: pulse-ring 1s ease-out infinite;
-  }
-  .talk-btn.active::after {
-    content: ''; position: absolute; inset: -18px; border-radius: 50%;
-    border: 1px solid rgba(64,232,144,0.2);
-    animation: pulse-ring 1s ease-out 0.35s infinite;
-  }
-  @keyframes pulse-ring {
-    0% { transform: scale(0.88); opacity: 1; }
-    100% { transform: scale(1.1); opacity: 0; }
-  }
-
-  /* Stop button */
-  .stop-btn {
-    width: 52px; height: 52px; border-radius: 50%;
-    border: 2px solid rgba(224,64,16,0.45);
-    background: radial-gradient(circle, rgba(224,64,16,0.18), rgba(10,5,25,0.92));
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; font-size: 1.3rem;
-    box-shadow: 0 0 12px rgba(224,64,16,0.15);
-    opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.1s;
-  }
-  .stop-btn.visible { opacity: 1; pointer-events: all; }
-  .stop-btn:active { transform: scale(0.9); }
-
-  .hint { font-size: 0.72rem; color: rgba(208,192,240,0.45); letter-spacing: 0.05em; font-style: italic; }
-
-  /* Loading dots */
-  .dots span {
-    display: inline-block; width: 6px; height: 6px; border-radius: 50%;
-    background: var(--gold-bright); margin: 0 2px;
-    animation: dot-bounce 1.2s ease-in-out infinite;
-  }
-  .dots span:nth-child(2) { animation-delay: 0.2s; }
-  .dots span:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes dot-bounce {
-    0%,80%,100% { transform: translateY(0); opacity: 0.4; }
-    40% { transform: translateY(-6px); opacity: 1; }
-  }
+  .dots span { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--gold-bright); margin:0 2px; animation:dot-bounce 1.2s ease-in-out infinite; }
+  .dots span:nth-child(2){animation-delay:.2s} .dots span:nth-child(3){animation-delay:.4s}
+  @keyframes dot-bounce { 0%,80%,100%{transform:translateY(0);opacity:.4} 40%{transform:translateY(-6px);opacity:1} }
 </style>
 </head>
 <body>
 
-<!-- KEY SCREEN -->
 <div class="screen" id="keyScreen">
   <div class="key-stars"></div>
   <div class="key-icon">🗝️</div>
@@ -263,95 +99,73 @@
   <button class="key-reset" id="keyResetBtn" style="display:none;">ponastavi ključ</button>
 </div>
 
-<!-- CHAT SCREEN -->
 <div class="screen hidden" id="chatScreen">
   <div class="siri-bg"></div>
   <div class="cauldron-glow" id="cauldronGlow"></div>
   <div id="particles"></div>
-
   <div class="chat-panel">
-
-    <!-- Drawing area - shown when Siri draws something -->
     <div class="drawing-area" id="drawingArea"></div>
-
-    <!-- Speech bubble -->
     <div class="speech-bubble">
       <div class="bubble-name">✦ SIRI PRAVI ✦</div>
       <div class="bubble-text" id="bubbleText">Hej! Sem Siri. Drži gumb in mi povej kaj! ✨</div>
     </div>
-
     <div class="status-line" id="statusLine">pritisni in drži gumb za govor</div>
-
     <div class="btn-row">
       <div style="width:52px;height:52px;"></div>
-      <button class="talk-btn" id="talkBtn" aria-label="Drži za govor">
-        <span class="mic-icon">🎤</span>
-      </button>
-      <button class="stop-btn" id="stopBtn" aria-label="Ustavi Siri">⏹</button>
+      <button class="talk-btn" id="talkBtn"><span class="mic-icon">🎤</span></button>
+      <button class="stop-btn" id="stopBtn">⏹</button>
     </div>
-
     <div class="hint">pritisni in drži • govori • spusti</div>
   </div>
 </div>
 
 <script>
-// ── STATE ──
 let apiKey = '';
 let recognition = null;
 let isListening = false;
 let isSpeaking = false;
+let finalTranscript = '';
 let conversationHistory = [];
 const synth = window.speechSynthesis;
 let voices = [];
 
-// ── SYSTEM PROMPT ──
 const SYSTEM_PROMPT = `Si Siri — čarovnica in bojevnica z belimi lasmi, ki živi v čarobnem gradu s kotličkom iz katerega prihajajo mavričaste barve. Imaš meč za hrbtom.
 
 Si kot starejša sestra — topla, zabavna, malo skrivnostna, a vedno prijazna in spodbudna. VEDNO govoriš slovensko.
 
-Otrok s katerim govoriš ima 5-6 let. AVTOMATSKO se prilagodi:
-- Če govori preprosto → govori preprosto nazaj
-- Če sprašuje kompleksno → odgovori malo bolj poglobljeno
-- Vedno bodi korak pred njo, nikoli preveč naprej
+Otrok s katerim govoriš ima 5-6 let. AVTOMATSKO se prilagodi njenemu načinu govora.
 
 NAČINI — samodejno prepoznaj kaj želi:
 
-🎨 RISANJE: Če prosi za risbo (nariši, pokaži mi...) — odgovori SAMO z besedilom "NARIŠI:" in nato SVG kodo. SVG mora biti:
-- Enostaven, barvit, srčkan, otroški stil
-- Debele črte, zaobljene oblike, vesele barve
-- Velikost: viewBox="0 0 300 250"
-- Primeri: samorog, zmaj, žaba, mačka, grad, Ciri...
-- Po SVG dodaj kratko slovensko besedilo npr. "Tu je tvoj samorog! ✨"
+RISANJE: Če prosi za risbo — odgovori SAMO z "NARIŠI:" in nato SVG kodo brez ničesar pred SVG. SVG mora biti: enostaven, barvit, srčkan, otroški stil, debele črte, zaobljene oblike, viewBox="0 0 300 250". Po zaključku SVG taga dodaj eno kratko slovensko poved brez zvezdic in brez emoji.
 
-📖 ZGODBE: Če prosi za zgodbo (povej zgodbo, pripoveduj...) — govori počasi, v kratkih stavkih, z dramatičnimi premori. Vsaki 3-4 stavke se ustavi in vprašaj "Naj nadaljujem?" Ponoči/za spat govori še bolj umirjeno in tiho.
+ZGODBE: Govori počasi, v kratkih stavkih. Vsake 3-4 stavke se ustavi z "Naj nadaljujem?" Ponoči govori umirjeno.
 
-🌍 UČENJE: Če sprašuje o živalih, naravi, svetu — odgovori na zabaven način, s primerjavo ki jo otrok razume. Npr. čebela je manjša od tvojega prsta!
+UČENJE: Zabavni odgovori s primerjavami ki jih otrok razume.
 
-⚔️ WITCHER SVET: Če sprašuje o Ciri, zmajih, čarovnikih — odgovori v duhu tega sveta, ampak primerno za 5-letnika. Ciri je pogumna bojevnica z belimi lasmi, podobna tebi!
+WITCHER SVET: Odgovori v duhu tega sveta, primerno za 5-letnika.
 
-🔤 ČRKOVANJE: Če sprašuje kako se napiše beseda — počasi in jasno povej vsako črko posebej.
+ČRKOVANJE: Počasi povej vsako črko posebej.
 
 SPLOŠNA PRAVILA:
-- Nikoli ne omeni AI, računalnik, program — si čarovnica!
-- Odgovori kratko — največ 3-4 stavke (razen zgodb)
-- Bodi vesela, topla, navdušena
-- Vedno hvali in spodbujaj
-- Nikoli ne reci "ne morem" — vedno najdi čaroben način
+- Nikoli ne omeni AI ali računalnik
+- Odgovori kratko, največ 3-4 stavke razen zgodb
+- Bodi vesela in topla
+- Vedno hvali
+- NIKOLI ne uporabljaj zvezdic ** ali * v odgovorih
+- NIKOLI ne uporabljaj markdown formatiranja
+- Piši navadno besedilo brez posebnih znakov
 - Slovenščina VEDNO`;
 
-// ── INIT ──
 window.addEventListener('DOMContentLoaded', () => {
   apiKey = localStorage.getItem('siri_api_key') || '';
   if (apiKey) showChat();
-
   document.getElementById('keyEnterBtn').addEventListener('click', handleKeyEnter);
-  document.getElementById('keyInput').addEventListener('keydown', e => { if (e.key === 'Enter') handleKeyEnter(); });
+  document.getElementById('keyInput').addEventListener('keydown', e => { if(e.key==='Enter') handleKeyEnter(); });
   document.getElementById('keyResetBtn').addEventListener('click', resetKey);
   document.getElementById('stopBtn').addEventListener('click', stopSpeaking);
-
   setupTalkButton();
   spawnParticles();
-
   synth.getVoices();
   synth.onvoiceschanged = () => { voices = synth.getVoices(); };
 });
@@ -359,7 +173,7 @@ window.addEventListener('DOMContentLoaded', () => {
 function handleKeyEnter() {
   const val = document.getElementById('keyInput').value.trim();
   if (!val.startsWith('sk-')) {
-    document.getElementById('keyInput').style.borderColor = 'rgba(224,64,16,0.7)';
+    document.getElementById('keyInput').style.borderColor = 'rgba(224,64,16,.7)';
     setTimeout(() => document.getElementById('keyInput').style.borderColor = '', 1500);
     return;
   }
@@ -381,16 +195,14 @@ function showChat() {
   document.getElementById('chatScreen').classList.remove('hidden');
 }
 
-// ── HOLD-TO-TALK (no timeout while holding) ──
 function setupTalkButton() {
   const btn = document.getElementById('talkBtn');
-
-  btn.addEventListener('touchstart',  e => { e.preventDefault(); startListening(); }, { passive: false });
-  btn.addEventListener('touchend',    e => { e.preventDefault(); stopListening(); },  { passive: false });
-  btn.addEventListener('touchcancel', e => { e.preventDefault(); stopListening(); },  { passive: false });
+  btn.addEventListener('touchstart',  e => { e.preventDefault(); startListening(); }, { passive:false });
+  btn.addEventListener('touchend',    e => { e.preventDefault(); releaseListening(); }, { passive:false });
+  btn.addEventListener('touchcancel', e => { e.preventDefault(); releaseListening(); }, { passive:false });
   btn.addEventListener('mousedown', e => { e.preventDefault(); startListening(); });
-  btn.addEventListener('mouseup',   () => stopListening());
-  btn.addEventListener('mouseleave',() => { if (isListening) stopListening(); });
+  btn.addEventListener('mouseup',   () => releaseListening());
+  btn.addEventListener('mouseleave',() => { if(isListening) releaseListening(); });
 }
 
 function startListening() {
@@ -398,58 +210,70 @@ function startListening() {
   if (isListening) return;
 
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { setStatus('Ta brskalnik ne podpira govora 😢', ''); return; }
+  if (!SR) { setStatus('Ta brskalnik ne podpira govora', ''); return; }
 
+  finalTranscript = '';
   recognition = new SR();
   recognition.lang = 'sl-SI';
-  recognition.continuous = true;   // keep listening while holding
-  recognition.interimResults = false;
+  recognition.continuous = true;
+  recognition.interimResults = true;
   recognition.maxAlternatives = 1;
 
-  let finalTranscript = '';
-
   recognition.onresult = e => {
+    let interim = '';
     for (let i = e.resultIndex; i < e.results.length; i++) {
       if (e.results[i].isFinal) {
         finalTranscript += e.results[i][0].transcript + ' ';
+      } else {
+        interim += e.results[i][0].transcript;
       }
+    }
+    // Show what's being heard
+    if (interim || finalTranscript) {
+      setStatus('slišim: ' + (finalTranscript + interim).trim().slice(-40) + '...', 'listening');
     }
   };
 
   recognition.onerror = e => {
-    if (e.error === 'no-speech') return; // ignore no-speech while holding
-    setStatus('Nisem te slišala... poskusi znova ✨', '');
-    stopListeningUI('');
+    if (e.error === 'no-speech') {
+      // restart to keep listening while holding
+      if (isListening) {
+        try { recognition.start(); } catch(err) {}
+      }
+      return;
+    }
+    console.error('SR error:', e.error);
   };
 
   recognition.onend = () => {
-    // when released, process what we got
-    const text = finalTranscript.trim();
-    stopListeningUI('');
-    if (text) handleUserSpeech(text);
+    // If still holding, restart
+    if (isListening) {
+      try { recognition.start(); } catch(err) {}
+    }
   };
 
   try {
     recognition.start();
     isListening = true;
-    finalTranscript = '';
     document.getElementById('talkBtn').classList.add('active');
     setStatus('poslušam te... 🎤', 'listening');
   } catch(e) {
-    stopListeningUI('');
+    console.error(e);
   }
 }
 
-function stopListening() {
+function releaseListening() {
   if (!isListening) return;
   isListening = false;
-  try { recognition && recognition.stop(); } catch(e) {}
-}
-
-function stopListeningUI(text) {
-  isListening = false;
   document.getElementById('talkBtn').classList.remove('active');
-  if (!isSpeaking) setStatus('pritisni in drži gumb za govor', '');
+  try { recognition && recognition.stop(); } catch(e) {}
+  const text = finalTranscript.trim();
+  finalTranscript = '';
+  if (text) {
+    handleUserSpeech(text);
+  } else {
+    setStatus('pritisni in drži gumb za govor', '');
+  }
 }
 
 function stopSpeaking() {
@@ -460,104 +284,99 @@ function stopSpeaking() {
   setStatus('pritisni in drži gumb za govor', '');
 }
 
-// ── API CALL ──
 async function handleUserSpeech(text) {
-  setStatus('Siri razmišlja... ✨', 'thinking');
+  setStatus('Siri razmišlja...', 'thinking');
   document.getElementById('bubbleText').innerHTML = '<span class="dots"><span></span><span></span><span></span></span>';
   document.getElementById('drawingArea').classList.remove('visible');
 
-  conversationHistory.push({ role: 'user', content: text });
+  conversationHistory.push({ role:'user', content:text });
 
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
         'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5',
-        max_tokens: 1000,
+        model:'claude-sonnet-4-5',
+        max_tokens:1000,
         system: SYSTEM_PROMPT,
         messages: conversationHistory.slice(-12)
       })
     });
 
     if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
       if (res.status === 401) {
-        document.getElementById('bubbleText').textContent = 'Hmm, čarobni ključ ne deluje... Prosi tatija, da ga preveri! 🗝️';
+        showBubble('Hmm, čarobni ključ ne deluje. Prosi tatija da ga preveri!');
         setStatus('napaka s ključem', '');
         return;
       }
-      throw new Error(err?.error?.message || 'napaka');
+      throw new Error('API napaka ' + res.status);
     }
 
     const data = await res.json();
-    const reply = data.content[0].text;
+    let reply = data.content[0].text;
 
-    conversationHistory.push({ role: 'assistant', content: reply });
+    conversationHistory.push({ role:'assistant', content:reply });
 
-    // Check if it's a drawing response
     if (reply.includes('NARIŠI:')) {
-      handleDrawingResponse(reply);
+      handleDrawing(reply);
     } else {
-      document.getElementById('bubbleText').textContent = reply;
-      speakText(reply);
+      const clean = cleanText(reply);
+      showBubble(clean);
+      speak(clean);
     }
 
   } catch(e) {
     console.error(e);
-    document.getElementById('bubbleText').textContent = 'Ups, kotliček se je zmešal... Poskusi znova! 🏰';
+    showBubble('Ups, kotliček se je zmešal. Poskusi znova!');
     setStatus('poskusi znova', '');
   }
 }
 
-// ── DRAWING HANDLER ──
-function handleDrawingResponse(reply) {
-  // Split at NARIŠI:
-  const parts = reply.split('NARIŠI:');
-  const afterTag = parts[1] || '';
-
-  // Extract SVG
-  const svgMatch = afterTag.match(/<svg[\s\S]*?<\/svg>/i);
-  const svgCode = svgMatch ? svgMatch[0] : null;
-
-  // Get text after SVG
-  const textAfterSvg = afterTag.replace(/<svg[\s\S]*?<\/svg>/i, '').trim();
-  const speakText2 = textAfterSvg || 'Tu je! ✨';
-
-  if (svgCode) {
-    const drawArea = document.getElementById('drawingArea');
-    drawArea.innerHTML = svgCode;
-    drawArea.classList.add('visible');
-    document.getElementById('bubbleText').textContent = speakText2;
-    speakText(speakText2);
-  } else {
-    // SVG failed, just speak
-    document.getElementById('bubbleText').textContent = speakText2;
-    speakText(speakText2);
-  }
+function cleanText(text) {
+  return text
+    .replace(/\*\*/g, '')
+    .replace(/\*/g, '')
+    .replace(/#/g, '')
+    .replace(/_{2,}/g, '')
+    .replace(/[\u{1F300}-\u{1FFFF}]/gu, '')
+    .replace(/[✨⚔️🏰🗝️✦▋★☆🎨📖🌍🔤🌙]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
-// ── TTS ──
-function speakText(text) {
+function handleDrawing(reply) {
+  const svgMatch = reply.match(/<svg[\s\S]*?<\/svg>/i);
+  // Get text after SVG tag
+  let afterSvg = reply.replace(/NARIŠI:[\s\S]*?<\/svg>/i, '').trim();
+  afterSvg = cleanText(afterSvg) || 'Tu je!';
+
+  if (svgMatch) {
+    const drawArea = document.getElementById('drawingArea');
+    drawArea.innerHTML = svgMatch[0];
+    drawArea.classList.add('visible');
+  }
+
+  showBubble(afterSvg);
+  speak(afterSvg);
+}
+
+function showBubble(text) {
+  document.getElementById('bubbleText').textContent = text;
+}
+
+function speak(text) {
   synth.cancel();
-
-  const clean = text
-    .replace(/NARIŠI:[\s\S]*?<\/svg>/i, '')
-    .replace(/<[^>]+>/g, '')
-    .replace(/[\u{1F000}-\u{1FFFF}]/gu, '')
-    .replace(/[✨⚔️🏰🗝️✦▋★☆🎨📖🌍🔤]/g, '')
-    .trim();
-
+  const clean = text.replace(/[\u{1F300}-\u{1FFFF}]/gu, '').replace(/[✨⚔️🏰🗝️✦▋★☆]/g, '').trim();
   if (!clean) return;
 
   const utt = new SpeechSynthesisUtterance(clean);
   utt.lang = 'sl-SI';
-  utt.rate = 0.9;
+  utt.rate = 0.88;
   utt.pitch = 1.1;
 
   voices = synth.getVoices();
@@ -565,48 +384,42 @@ function speakText(text) {
     voices.find(v => v.lang === 'sl-SI') ||
     voices.find(v => v.lang.startsWith('sl')) ||
     voices.find(v => v.lang.startsWith('hr')) ||
-    voices.find(v => v.lang.startsWith('bs')) ||
-    voices.find(v => (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman'))) ||
+    voices.find(v => v.name.toLowerCase().includes('female')) ||
     null;
-
   if (pick) utt.voice = pick;
 
   utt.onstart = () => {
     isSpeaking = true;
     document.getElementById('stopBtn').classList.add('visible');
     document.getElementById('cauldronGlow').classList.add('active');
-    setStatus('Siri govori... 🔮', 'speaking');
+    setStatus('Siri govori...', 'speaking');
     triggerMagicParticles();
   };
-
-  const onDone = () => {
+  const done = () => {
     isSpeaking = false;
     document.getElementById('stopBtn').classList.remove('visible');
     document.getElementById('cauldronGlow').classList.remove('active');
     setStatus('pritisni in drži gumb za govor', '');
   };
-
-  utt.onend = onDone;
-  utt.onerror = onDone;
+  utt.onend = done;
+  utt.onerror = done;
 
   setTimeout(() => synth.speak(utt), 80);
 }
 
-// ── UI ──
 function setStatus(text, type) {
   const el = document.getElementById('statusLine');
   el.textContent = text;
   el.className = 'status-line' + (type ? ' ' + type : '');
 }
 
-// ── PARTICLES ──
 function spawnParticles() {
   const c = document.getElementById('particles');
-  const colors = ['#40e890','#f060c0','#60c0ff','#f0c040','#ffffff'];
-  for (let i = 0; i < 14; i++) {
+  const colors = ['#40e890','#f060c0','#60c0ff','#f0c040','#fff'];
+  for (let i=0; i<14; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
-    const s = Math.random() * 4 + 2;
+    const s = Math.random()*4+2;
     p.style.cssText = `width:${s}px;height:${s}px;left:${28+Math.random()*44}%;bottom:${8+Math.random()*22}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${5+Math.random()*7}s;animation-delay:${Math.random()*10}s;box-shadow:0 0 ${s*2}px currentColor;`;
     c.appendChild(p);
   }
@@ -615,11 +428,11 @@ function spawnParticles() {
 function triggerMagicParticles() {
   const c = document.getElementById('particles');
   const colors = ['#40e890','#f060c0','#60c0ff','#f0c040'];
-  for (let i = 0; i < 8; i++) {
+  for (let i=0; i<8; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
-    const s = Math.random() * 5 + 3;
-    p.style.cssText = `width:${s}px;height:${s}px;left:${33+Math.random()*34}%;bottom:28%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${2+Math.random()*3}s;animation-delay:${Math.random()*0.4}s;box-shadow:0 0 ${s*2}px currentColor;`;
+    const s = Math.random()*5+3;
+    p.style.cssText = `width:${s}px;height:${s}px;left:${33+Math.random()*34}%;bottom:28%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${2+Math.random()*3}s;animation-delay:${Math.random()*.4}s;box-shadow:0 0 ${s*2}px currentColor;`;
     c.appendChild(p);
     setTimeout(() => p.remove(), 5500);
   }
