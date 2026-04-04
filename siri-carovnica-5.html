@@ -41,11 +41,8 @@
   /* ══ KEY SCREEN ══ */
   #keyScreen {
     background: radial-gradient(ellipse at 50% 30%, #1a0a30 0%, #06030f 70%);
-    padding: 2rem;
-    text-align: center;
-    gap: 1.5rem;
+    padding: 2rem; text-align: center; gap: 1.5rem;
   }
-
   .key-stars {
     position: absolute; inset: 0; pointer-events: none;
     background-image:
@@ -60,57 +57,39 @@
       radial-gradient(1px 1px at 60% 85%, rgba(255,255,255,0.4) 0%, transparent 100%),
       radial-gradient(1.5px 1.5px at 40% 70%, rgba(240,192,64,0.5) 0%, transparent 100%);
   }
-
   .key-icon { font-size: 4rem; animation: float 3s ease-in-out infinite; position: relative; z-index: 1; }
   @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
   .key-title {
-    font-family: 'Cinzel', serif;
-    font-size: 1.6rem; font-weight: 700;
-    color: var(--gold-bright);
-    text-shadow: 0 0 20px rgba(240,192,64,0.6);
-    letter-spacing: 0.1em;
-    position: relative; z-index: 1;
+    font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 700;
+    color: var(--gold-bright); text-shadow: 0 0 20px rgba(240,192,64,0.6);
+    letter-spacing: 0.1em; position: relative; z-index: 1;
   }
-
   .key-subtitle {
-    font-size: 1rem; color: var(--mist);
-    line-height: 1.5; max-width: 280px;
-    font-style: italic; position: relative; z-index: 1;
+    font-size: 1rem; color: var(--mist); line-height: 1.5;
+    max-width: 280px; font-style: italic; position: relative; z-index: 1;
   }
-
   .key-input-wrap { position: relative; z-index: 1; width: 100%; max-width: 320px; }
-
   .key-input {
     width: 100%; padding: 0.9rem 1.2rem;
     background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(240,192,64,0.3);
-    border-radius: 12px; color: var(--cream);
-    font-family: 'Crimson Text', serif; font-size: 1rem;
-    outline: none; text-align: center;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    border: 1px solid rgba(240,192,64,0.3); border-radius: 12px;
+    color: var(--cream); font-family: 'Crimson Text', serif; font-size: 1rem;
+    outline: none; text-align: center; transition: border-color 0.3s, box-shadow 0.3s;
   }
   .key-input:focus { border-color: rgba(240,192,64,0.7); box-shadow: 0 0 20px rgba(240,192,64,0.15); }
   .key-input::placeholder { color: var(--smoke); }
-
   .key-btn {
-    position: relative; z-index: 1;
-    width: 100%; max-width: 320px;
-    padding: 1rem 2rem;
-    background: linear-gradient(135deg, #8b6010, #c8920a, #8b6010);
-    border: none; border-radius: 12px;
-    color: var(--midnight); font-family: 'Cinzel', serif;
-    font-size: 1rem; font-weight: 700; letter-spacing: 0.08em;
-    cursor: pointer; box-shadow: 0 4px 20px rgba(200,146,10,0.4);
-    transition: transform 0.15s, box-shadow 0.15s;
+    position: relative; z-index: 1; width: 100%; max-width: 320px;
+    padding: 1rem 2rem; background: linear-gradient(135deg, #8b6010, #c8920a, #8b6010);
+    border: none; border-radius: 12px; color: var(--midnight);
+    font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 700;
+    letter-spacing: 0.08em; cursor: pointer; box-shadow: 0 4px 20px rgba(200,146,10,0.4);
+    transition: transform 0.15s;
   }
   .key-btn:active { transform: scale(0.97); }
-
   .key-reset {
-    position: relative; z-index: 1;
-    background: none; border: none;
-    color: var(--smoke); font-size: 0.8rem;
-    font-family: 'Crimson Text', serif;
+    position: relative; z-index: 1; background: none; border: none;
+    color: var(--smoke); font-size: 0.8rem; font-family: 'Crimson Text', serif;
     cursor: pointer; text-decoration: underline; padding: 0.3rem;
   }
 
@@ -120,28 +99,20 @@
   .siri-bg {
     position: absolute; inset: 0;
     background-image: url('https://raw.githubusercontent.com/momcilovicrobert-momc/siri-carovnica/main/siri.png');
-    background-size: cover;
-    background-position: center top;
+    background-size: cover; background-position: center top;
   }
   .siri-bg::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(
-      to bottom,
-      rgba(6,3,15,0) 0%,
-      rgba(6,3,15,0) 35%,
-      rgba(6,3,15,0.4) 55%,
-      rgba(6,3,15,0.92) 78%,
-      rgba(6,3,15,0.98) 100%
-    );
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to bottom,
+      rgba(6,3,15,0) 0%, rgba(6,3,15,0) 35%,
+      rgba(6,3,15,0.4) 55%, rgba(6,3,15,0.92) 78%,
+      rgba(6,3,15,0.98) 100%);
   }
 
-  /* Magic particles */
+  /* Particles */
   .particle {
-    position: absolute; border-radius: 50%;
-    pointer-events: none;
-    animation: particle-rise linear infinite;
-    opacity: 0;
+    position: absolute; border-radius: 50%; pointer-events: none;
+    animation: particle-rise linear infinite; opacity: 0;
   }
   @keyframes particle-rise {
     0%   { transform: translateY(0) scale(1); opacity: 0; }
@@ -152,12 +123,10 @@
 
   /* Cauldron glow */
   .cauldron-glow {
-    position: absolute; bottom: 28%; left: 50%;
-    transform: translateX(-50%);
+    position: absolute; bottom: 28%; left: 50%; transform: translateX(-50%);
     width: 220px; height: 90px;
     background: radial-gradient(ellipse, rgba(64,232,144,0.2) 0%, transparent 70%);
-    pointer-events: none; z-index: 5; opacity: 0;
-    transition: opacity 0.5s;
+    pointer-events: none; z-index: 5; opacity: 0; transition: opacity 0.5s;
     animation: cauldron-pulse 2s ease-in-out infinite;
   }
   .cauldron-glow.active { opacity: 1; }
@@ -168,37 +137,45 @@
 
   /* Bottom panel */
   .chat-panel {
-    position: relative; z-index: 10;
-    width: 100%; padding: 1rem 1.2rem 2rem;
-    display: flex; flex-direction: column;
-    align-items: center; gap: 0.8rem;
+    position: relative; z-index: 10; width: 100%;
+    padding: 0.8rem 1.2rem 1.8rem;
+    display: flex; flex-direction: column; align-items: center; gap: 0.7rem;
   }
+
+  /* Drawing display area */
+  .drawing-area {
+    width: 100%; max-width: 420px;
+    background: rgba(10,5,25,0.85);
+    border: 1px solid rgba(240,192,64,0.2);
+    border-radius: 16px; padding: 0.8rem;
+    backdrop-filter: blur(14px);
+    display: none; align-items: center; justify-content: center;
+    min-height: 180px;
+  }
+  .drawing-area.visible { display: flex; }
+  .drawing-area svg { max-width: 100%; max-height: 200px; }
 
   /* Speech bubble */
   .speech-bubble {
     width: 100%; max-width: 420px; min-height: 72px;
-    background: rgba(10, 5, 25, 0.88);
-    border: 1px solid rgba(240,192,64,0.2);
-    border-radius: 20px; padding: 1rem 1.2rem;
-    backdrop-filter: blur(14px);
+    background: rgba(10,5,25,0.88);
+    border: 1px solid rgba(240,192,64,0.2); border-radius: 20px;
+    padding: 1rem 1.2rem; backdrop-filter: blur(14px);
     box-shadow: 0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(240,192,64,0.08);
   }
-
   .bubble-name {
     font-family: 'Cinzel', serif; font-size: 0.65rem; font-weight: 600;
     color: var(--gold-bright); letter-spacing: 0.15em; margin-bottom: 0.4rem; opacity: 0.75;
   }
-
   .bubble-text {
-    font-size: 1.1rem; line-height: 1.6;
-    color: var(--cream); font-style: italic; min-height: 1.6rem;
+    font-size: 1.1rem; line-height: 1.6; color: var(--cream);
+    font-style: italic; min-height: 1.6rem;
   }
 
   /* Status */
   .status-line {
-    font-size: 0.8rem; color: var(--smoke);
-    letter-spacing: 0.04em; height: 1.1rem;
-    font-style: italic; transition: color 0.3s;
+    font-size: 0.8rem; color: var(--smoke); letter-spacing: 0.04em;
+    height: 1.1rem; font-style: italic; transition: color 0.3s;
   }
   .status-line.listening { color: var(--magic-green); }
   .status-line.speaking  { color: var(--gold-bright); }
@@ -222,13 +199,11 @@
     transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
   }
   .talk-btn.active {
-    transform: scale(0.93);
-    border-color: var(--magic-green);
+    transform: scale(0.93); border-color: var(--magic-green);
     box-shadow: 0 0 30px rgba(64,232,144,0.45), 0 4px 16px rgba(0,0,0,0.7);
     background: radial-gradient(circle at 40% 35%, rgba(64,232,144,0.18), rgba(10,5,25,0.92));
   }
   .talk-btn .mic-icon { font-size: 2rem; pointer-events: none; }
-
   .talk-btn.active::before {
     content: ''; position: absolute; inset: -8px; border-radius: 50%;
     border: 2px solid rgba(64,232,144,0.45);
@@ -252,22 +227,18 @@
     display: flex; align-items: center; justify-content: center;
     cursor: pointer; font-size: 1.3rem;
     box-shadow: 0 0 12px rgba(224,64,16,0.15);
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.3s, transform 0.1s;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.1s;
   }
   .stop-btn.visible { opacity: 1; pointer-events: all; }
   .stop-btn:active { transform: scale(0.9); }
 
-  .hint {
-    font-size: 0.72rem; color: rgba(208,192,240,0.45);
-    letter-spacing: 0.05em; font-style: italic;
-  }
+  .hint { font-size: 0.72rem; color: rgba(208,192,240,0.45); letter-spacing: 0.05em; font-style: italic; }
 
   /* Loading dots */
   .dots span {
-    display: inline-block; width: 6px; height: 6px;
-    border-radius: 50%; background: var(--gold-bright);
-    margin: 0 2px; animation: dot-bounce 1.2s ease-in-out infinite;
+    display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold-bright); margin: 0 2px;
+    animation: dot-bounce 1.2s ease-in-out infinite;
   }
   .dots span:nth-child(2) { animation-delay: 0.2s; }
   .dots span:nth-child(3) { animation-delay: 0.4s; }
@@ -279,7 +250,7 @@
 </head>
 <body>
 
-<!-- KEY ENTRY SCREEN -->
+<!-- KEY SCREEN -->
 <div class="screen" id="keyScreen">
   <div class="key-stars"></div>
   <div class="key-icon">🗝️</div>
@@ -299,6 +270,11 @@
   <div id="particles"></div>
 
   <div class="chat-panel">
+
+    <!-- Drawing area - shown when Siri draws something -->
+    <div class="drawing-area" id="drawingArea"></div>
+
+    <!-- Speech bubble -->
     <div class="speech-bubble">
       <div class="bubble-name">✦ SIRI PRAVI ✦</div>
       <div class="bubble-text" id="bubbleText">Hej! Sem Siri. Drži gumb in mi povej kaj! ✨</div>
@@ -307,7 +283,7 @@
     <div class="status-line" id="statusLine">pritisni in drži gumb za govor</div>
 
     <div class="btn-row">
-      <div style="width:52px; height:52px;"></div>
+      <div style="width:52px;height:52px;"></div>
       <button class="talk-btn" id="talkBtn" aria-label="Drži za govor">
         <span class="mic-icon">🎤</span>
       </button>
@@ -328,19 +304,40 @@ let conversationHistory = [];
 const synth = window.speechSynthesis;
 let voices = [];
 
-const SYSTEM_PROMPT = `Si Siri — čarovnica in bojevnica z belimi lasmi, ki živi v čarobnem gradu s kotličkom iz katerega prihajajo mavričaste barve.
+// ── SYSTEM PROMPT ──
+const SYSTEM_PROMPT = `Si Siri — čarovnica in bojevnica z belimi lasmi, ki živi v čarobnem gradu s kotličkom iz katerega prihajajo mavričaste barve. Imaš meč za hrbtom.
 
-Si kot starejša sestra — topla, zabavna, malo skrivnostna, a vedno prijazna in spodbudna.
+Si kot starejša sestra — topla, zabavna, malo skrivnostna, a vedno prijazna in spodbudna. VEDNO govoriš slovensko.
 
-Govoriš z otrokom, ki ima 5 let. Pravila:
-- Govori slovensko, vedno in samo slovensko
-- Stavki naj bodo kratki in jasni — ona je pametna, ne otročasta!
-- Bodi vesela, polna energije, navdušena
-- Včasih dodaj magične besede (npr. "čarobno!", "abrakadabra!", "res čisto zares!")
-- Nikoli ne omeni, da si AI ali računalnik — si čarovnica Siri!
-- Odgovori naj bodo kratki — največ 3 stavke
+Otrok s katerim govoriš ima 5-6 let. AVTOMATSKO se prilagodi:
+- Če govori preprosto → govori preprosto nazaj
+- Če sprašuje kompleksno → odgovori malo bolj poglobljeno
+- Vedno bodi korak pred njo, nikoli preveč naprej
+
+NAČINI — samodejno prepoznaj kaj želi:
+
+🎨 RISANJE: Če prosi za risbo (nariši, pokaži mi...) — odgovori SAMO z besedilom "NARIŠI:" in nato SVG kodo. SVG mora biti:
+- Enostaven, barvit, srčkan, otroški stil
+- Debele črte, zaobljene oblike, vesele barve
+- Velikost: viewBox="0 0 300 250"
+- Primeri: samorog, zmaj, žaba, mačka, grad, Ciri...
+- Po SVG dodaj kratko slovensko besedilo npr. "Tu je tvoj samorog! ✨"
+
+📖 ZGODBE: Če prosi za zgodbo (povej zgodbo, pripoveduj...) — govori počasi, v kratkih stavkih, z dramatičnimi premori. Vsaki 3-4 stavke se ustavi in vprašaj "Naj nadaljujem?" Ponoči/za spat govori še bolj umirjeno in tiho.
+
+🌍 UČENJE: Če sprašuje o živalih, naravi, svetu — odgovori na zabaven način, s primerjavo ki jo otrok razume. Npr. čebela je manjša od tvojega prsta!
+
+⚔️ WITCHER SVET: Če sprašuje o Ciri, zmajih, čarovnikih — odgovori v duhu tega sveta, ampak primerno za 5-letnika. Ciri je pogumna bojevnica z belimi lasmi, podobna tebi!
+
+🔤 ČRKOVANJE: Če sprašuje kako se napiše beseda — počasi in jasno povej vsako črko posebej.
+
+SPLOŠNA PRAVILA:
+- Nikoli ne omeni AI, računalnik, program — si čarovnica!
+- Odgovori kratko — največ 3-4 stavke (razen zgodb)
+- Bodi vesela, topla, navdušena
 - Vedno hvali in spodbujaj
-- Če te vpraša kaj težkega, odgovori na zabaven način, ki ga otrok razume`;
+- Nikoli ne reci "ne morem" — vedno najdi čaroben način
+- Slovenščina VEDNO`;
 
 // ── INIT ──
 window.addEventListener('DOMContentLoaded', () => {
@@ -355,7 +352,6 @@ window.addEventListener('DOMContentLoaded', () => {
   setupTalkButton();
   spawnParticles();
 
-  // preload voices
   synth.getVoices();
   synth.onvoiceschanged = () => { voices = synth.getVoices(); };
 });
@@ -385,9 +381,10 @@ function showChat() {
   document.getElementById('chatScreen').classList.remove('hidden');
 }
 
-// ── HOLD-TO-TALK ──
+// ── HOLD-TO-TALK (no timeout while holding) ──
 function setupTalkButton() {
   const btn = document.getElementById('talkBtn');
+
   btn.addEventListener('touchstart',  e => { e.preventDefault(); startListening(); }, { passive: false });
   btn.addEventListener('touchend',    e => { e.preventDefault(); stopListening(); },  { passive: false });
   btn.addEventListener('touchcancel', e => { e.preventDefault(); stopListening(); },  { passive: false });
@@ -405,39 +402,51 @@ function startListening() {
 
   recognition = new SR();
   recognition.lang = 'sl-SI';
-  recognition.continuous = false;
+  recognition.continuous = true;   // keep listening while holding
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
 
+  let finalTranscript = '';
+
   recognition.onresult = e => {
-    const text = e.results[0][0].transcript;
-    if (text.trim()) handleUserSpeech(text);
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) {
+        finalTranscript += e.results[i][0].transcript + ' ';
+      }
+    }
   };
 
   recognition.onerror = e => {
-    if (e.error !== 'no-speech') setStatus('Nisem te slišala... poskusi znova ✨', '');
-    stopListeningUI();
+    if (e.error === 'no-speech') return; // ignore no-speech while holding
+    setStatus('Nisem te slišala... poskusi znova ✨', '');
+    stopListeningUI('');
   };
 
-  recognition.onend = () => stopListeningUI();
+  recognition.onend = () => {
+    // when released, process what we got
+    const text = finalTranscript.trim();
+    stopListeningUI('');
+    if (text) handleUserSpeech(text);
+  };
 
   try {
     recognition.start();
     isListening = true;
+    finalTranscript = '';
     document.getElementById('talkBtn').classList.add('active');
     setStatus('poslušam te... 🎤', 'listening');
   } catch(e) {
-    stopListeningUI();
+    stopListeningUI('');
   }
 }
 
 function stopListening() {
   if (!isListening) return;
+  isListening = false;
   try { recognition && recognition.stop(); } catch(e) {}
-  stopListeningUI();
 }
 
-function stopListeningUI() {
+function stopListeningUI(text) {
   isListening = false;
   document.getElementById('talkBtn').classList.remove('active');
   if (!isSpeaking) setStatus('pritisni in drži gumb za govor', '');
@@ -455,6 +464,7 @@ function stopSpeaking() {
 async function handleUserSpeech(text) {
   setStatus('Siri razmišlja... ✨', 'thinking');
   document.getElementById('bubbleText').innerHTML = '<span class="dots"><span></span><span></span><span></span></span>';
+  document.getElementById('drawingArea').classList.remove('visible');
 
   conversationHistory.push({ role: 'user', content: text });
 
@@ -469,9 +479,9 @@ async function handleUserSpeech(text) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-5',
-        max_tokens: 300,
+        max_tokens: 1000,
         system: SYSTEM_PROMPT,
-        messages: conversationHistory.slice(-10)
+        messages: conversationHistory.slice(-12)
       })
     });
 
@@ -489,8 +499,14 @@ async function handleUserSpeech(text) {
     const reply = data.content[0].text;
 
     conversationHistory.push({ role: 'assistant', content: reply });
-    document.getElementById('bubbleText').textContent = reply;
-    speakText(reply);
+
+    // Check if it's a drawing response
+    if (reply.includes('NARIŠI:')) {
+      handleDrawingResponse(reply);
+    } else {
+      document.getElementById('bubbleText').textContent = reply;
+      speakText(reply);
+    }
 
   } catch(e) {
     console.error(e);
@@ -499,27 +515,58 @@ async function handleUserSpeech(text) {
   }
 }
 
+// ── DRAWING HANDLER ──
+function handleDrawingResponse(reply) {
+  // Split at NARIŠI:
+  const parts = reply.split('NARIŠI:');
+  const afterTag = parts[1] || '';
+
+  // Extract SVG
+  const svgMatch = afterTag.match(/<svg[\s\S]*?<\/svg>/i);
+  const svgCode = svgMatch ? svgMatch[0] : null;
+
+  // Get text after SVG
+  const textAfterSvg = afterTag.replace(/<svg[\s\S]*?<\/svg>/i, '').trim();
+  const speakText2 = textAfterSvg || 'Tu je! ✨';
+
+  if (svgCode) {
+    const drawArea = document.getElementById('drawingArea');
+    drawArea.innerHTML = svgCode;
+    drawArea.classList.add('visible');
+    document.getElementById('bubbleText').textContent = speakText2;
+    speakText(speakText2);
+  } else {
+    // SVG failed, just speak
+    document.getElementById('bubbleText').textContent = speakText2;
+    speakText(speakText2);
+  }
+}
+
 // ── TTS ──
 function speakText(text) {
   synth.cancel();
 
-  // Strip emojis and symbols for cleaner speech
-  const clean = text.replace(/[\u{1F000}-\u{1FFFF}]/gu, '')
-                    .replace(/[✨⚔️🏰🗝️✦▋★☆]/g, '').trim();
+  const clean = text
+    .replace(/NARIŠI:[\s\S]*?<\/svg>/i, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/[\u{1F000}-\u{1FFFF}]/gu, '')
+    .replace(/[✨⚔️🏰🗝️✦▋★☆🎨📖🌍🔤]/g, '')
+    .trim();
+
+  if (!clean) return;
 
   const utt = new SpeechSynthesisUtterance(clean);
   utt.lang = 'sl-SI';
-  utt.rate = 0.92;
-  utt.pitch = 1.15;
+  utt.rate = 0.9;
+  utt.pitch = 1.1;
 
-  // Best voice selection order
   voices = synth.getVoices();
   const pick =
     voices.find(v => v.lang === 'sl-SI') ||
     voices.find(v => v.lang.startsWith('sl')) ||
     voices.find(v => v.lang.startsWith('hr')) ||
     voices.find(v => v.lang.startsWith('bs')) ||
-    voices.find(v => (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman')) && v.lang.startsWith('en')) ||
+    voices.find(v => (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman'))) ||
     null;
 
   if (pick) utt.voice = pick;
